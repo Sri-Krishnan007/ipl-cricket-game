@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Toss Result - Cricket Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .toss-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .toss-info h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .toss-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .decision-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.3);
+        }
+
+        .decision-box h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .decision-text {
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .probabilities {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .probabilities h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .prob-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .prob-label {
+            flex: 0 0 80px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .prob-bar {
+            flex: 1;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            margin: 0 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prob-fill-bat {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #81C784 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .prob-fill-bowl {
+            height: 100%;
+            background: linear-gradient(90deg, #2196F3 0%, #64B5F6 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .prob-value {
+            flex: 0 0 60px;
+            text-align: right;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .bat-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .bat-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+        }
+
+        .bowl-btn {
+            background: linear-gradient(135deg, #2196F3 0%, #64B5F6 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+        }
+
+        .bowl-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(33, 150, 243, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .result-card {
+                padding: 30px 20px;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪙 Toss Result</h1>
+
+        <div class="result-card">
+            <!-- Toss Result -->
+            <div class="toss-info">
+                <h2>{{ toss_winner }} Won the Toss!</h2>
+                <div class="toss-details">
+                    <div class="detail-item">
+                        <div class="detail-label">You Called</div>
+                        <div class="detail-value">{{ toss_call }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Coin Result</div>
+                        <div class="detail-value">{{ coin_result }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optimal Decision -->
+            <div class="decision-box">
+                <h3>📊 Game Theory Analysis</h3>
+                <div class="decision-text">{{ optimal_decision }}</div>
+                <p>Based on pitch conditions and win probabilities</p>
+            </div>
+
+            <!-- Probabilities -->
+            <div class="probabilities">
+                <h3>Win Probabilities</h3>
+                
+                <div class="prob-item">
+                    <div class="prob-label">Bat First</div>
+                    <div class="prob-bar">
+                        <div class="prob-fill-bat" style="width: {{ bat_percentage }}%;">
+                            {% if bat_percentage > 30 %}{{ bat_percentage }}%{% endif %}
+                        </div>
+                    </div>
+                    <div class="prob-value">{{ bat_percentage }}%</div>
+                </div>
+
+                <div class="prob-item">
+                    <div class="prob-label">Bowl First</div>
+                    <div class="prob-bar">
+                        <div class="prob-fill-bowl" style="width: {{ bowl_percentage }}%;">
+                            {% if bowl_percentage > 30 %}{{ bowl_percentage }}%{% endif %}
+                        </div>
+                    </div>
+                    <div class="prob-value">{{ bowl_percentage }}%</div>
+                </div>
+            </div>
+
+            <!-- Decision Buttons -->
+            <div class="buttons">
+                <form action="/start" method="POST" style="display: contents;">
+                    <input type="hidden" name="decision" value="bat">
+                    <input type="hidden" name="overs" id="overs_hidden">
+                    <input type="hidden" name="mode" id="mode_hidden">
+                    <button type="submit" class="bat-btn">⚾ Bat First</button>
+                </form>
+                <form action="/start" method="POST" style="display: contents;">
+                    <input type="hidden" name="decision" value="bowl">
+                    <input type="hidden" name="overs" id="overs_hidden2">
+                    <input type="hidden" name="mode" id="mode_hidden2">
+                    <button type="submit" class="bowl-btn">🎯 Bowl First</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get stored values from session and populate
+        const form1 = document.querySelector('form:first-of-type');
+        const form2 = document.querySelector('form:last-of-type');
+        
+        // Since we can't directly access session in JavaScript,
+        // we'll use a POST request to pass all data
+    </script>
+</body>
+</html>

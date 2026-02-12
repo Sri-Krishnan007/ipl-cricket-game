@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cricket Match Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        /* Score Card */
+        .score-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .score-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-item-main {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .score-item-main h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-item-main p {
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .overs {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .overs h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .overs p {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        /* Players Card */
+        .players-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .player-info {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .player-info h3 {
+            color: #667eea;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .player-info p {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Bot Choice Box */
+        #botChoice {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.3);
+            border-left: 5px solid #fff;
+        }
+
+        #botChoice h4 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #botChoiceText {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        #botChoiceText strong {
+            font-weight: 700;
+        }
+
+        /* Effective Scores Box */
+        #effectiveScoresDiv {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        #effectiveScoresDiv h4 {
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #scoresList {
+            display: grid;
+            gap: 8px;
+        }
+
+        .score-item {
+            background: rgba(255,255,255,0.2);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: white;
+            backdrop-filter: blur(10px);
+            border-left: 3px solid white;
+        }
+
+        .score-item strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .checkbox-label input {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-label span {
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Select Dropdowns */
+        .select-group {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .select-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 900px) {
+            .select-group {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: white;
+            color: #333;
+        }
+
+        select:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Play Ball Button */
+        .button-container {
+            text-align: center;
+        }
+
+        button {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Commentary Section */
+        .commentary-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .commentary-section h3 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .commentary-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .commentary-item:nth-child(odd) {
+            background: #f0f4ff;
+        }
+
+        .commentary-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Scrollbar Styling */
+        #effectiveScoresDiv::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #effectiveScoresDiv::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        #effectiveScoresDiv::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.4);
+            border-radius: 10px;
+        }
+
+        #effectiveScoresDiv::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.6);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+
+            .score-card {
+                padding: 20px;
+            }
+
+            .score-display {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .players-card {
+                grid-template-columns: 1fr;
+            }
+
+            .score-item-main h3,
+            .overs h3 {
+                font-size: 0.8em;
+            }
+
+            .score-item-main p,
+            .overs p {
+                font-size: 1.5em;
+            }
+
+            select {
+                font-size: 0.85em;
+                padding: 10px 12px;
+            }
+
+            button {
+                padding: 12px 30px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏏 Cricket Match Simulator</h1>
+
+        <!-- Score Card -->
+        <div class="score-card">
+            <div class="score-display">
+                <div class="score-item-main">
+                    <h3>Current Score</h3>
+                    <p>{{ runs }}<span style="font-size: 0.6em;">/{{ wickets }}</span></p>
+                </div>
+                <div class="overs">
+                    <h3>Overs</h3>
+                    <p>{{ overs_display }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Players Card -->
+        <div class="players-card">
+            <div class="player-info">
+                <h3>⚾ Batsman</h3>
+                <p>{{ current_batsman }}</p>
+            </div>
+            <div class="player-info">
+                <h3>🎯 Bowler</h3>
+                <p>{{ current_bowler }}</p>
+            </div>
+        </div>
+
+        <!-- Bot Choice Display -->
+        <div id="botChoice" style="display: none;">
+            <h4>🤖 Bot's Choice</h4>
+            <p id="botChoiceText"></p>
+        </div>
+
+        <!-- Effective Scores Display -->
+        <div id="effectiveScoresDiv" style="display: none;">
+            <h4>📊 All Effective Scores</h4>
+            <div id="scoresList"></div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <label class="checkbox-label">
+                <input type="checkbox" id="showScoreCheckbox" name="show_score" value="yes">
+                <span>Show Effective Score</span>
+            </label>
+
+            <form id="playBallForm" action="/play_ball" method="POST">
+                {% if (session.innings == 1 and session.decision == "bat") 
+                   or (session.innings == 2 and session.decision == "bowl") %}
+
+                <div class="select-group">
+                    <select id="shotSelect" name="shot">
+                        {% for key in data.keys() %}
+                        {% for s in data[key].shots %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% else %}
+
+                <div class="select-group">
+                    <select id="bowlingTypeSelect" name="bowling_type">
+                        {% for key in data.keys() %}
+                        <option value="{{ key }}" {% if key == first_bowling_type %}selected{% endif %}>{{ key }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <select id="lineSelect" name="line">
+                        {% for l in first_sheet.lines %}
+                        <option value="{{ l }}">{{ l }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <select id="lengthSelect" name="length">
+                        {% for l in first_sheet.lengths %}
+                        <option value="{{ l }}">{{ l }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <select id="variationSelect" name="variation">
+                        {% for v in first_sheet.variations %}
+                        <option value="{{ v }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% endif %}
+
+                <div class="button-container">
+                    <button type="submit">⚡ Play Ball</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Commentary Section -->
+        <div class="commentary-section">
+            <h3>📢 Live Commentary</h3>
+            {% if commentary %}
+                {% for line in commentary %}
+                <div class="commentary-item">{{ line }}</div>
+                {% endfor %}
+            {% else %}
+                <div class="commentary-item">Match starting... Get ready!</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

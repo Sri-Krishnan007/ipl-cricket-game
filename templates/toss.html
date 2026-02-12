@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cricket Toss - Match Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .toss-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
+        }
+
+        label::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: white;
+            color: #333;
+            font-weight: 500;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        select:hover {
+            border-color: #667eea;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-container {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        button:active {
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            line-height: 1.6;
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .info-box strong {
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .toss-card {
+                padding: 30px 20px;
+            }
+
+            button {
+                padding: 14px 24px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪙 Match Toss</h1>
+        <p class="subtitle">Select match conditions for toss decision analysis</p>
+
+        <div class="toss-card">
+            <form action="/calculate_toss" method="POST">
+                
+                <!-- Toss Call -->
+                <div class="form-group">
+                    <label for="toss_call">🎲 Your Toss Call</label>
+                    <select name="toss_call" id="toss_call" required>
+                        <option value="">-- Choose Heads or Tails --</option>
+                        <option value="Heads">👑 Heads</option>
+                        <option value="Tails">🐢 Tails</option>
+                    </select>
+                </div>
+
+                <!-- Match Time -->
+                <div class="form-group">
+                    <label for="time">⏰ Time of Match</label>
+                    <select name="time" id="time" required>
+                        <option value="">-- Select Time --</option>
+                        <option value="Afternoon Match">☀️ Afternoon Match</option>
+                        <option value="Night Match">🌙 Night Match</option>
+                    </select>
+                </div>
+
+                <!-- Pitch Type -->
+                <div class="form-group">
+                    <label for="pitch">🌱 Pitch Type</label>
+                    <select name="pitch" id="pitch" required>
+                        <option value="">-- Select Pitch --</option>
+                        <option value="Dry Pitch">🏜️ Dry Pitch (Batter friendly)</option>
+                        <option value="Green Pitch">💚 Green Pitch (Bowler friendly)</option>
+                    </select>
+                </div>
+
+                <!-- Dew Level -->
+                <div class="form-group">
+                    <label for="dew">💧 Dew Level</label>
+                    <select name="dew" id="dew" required>
+                        <option value="">-- Select Dew --</option>
+                        <option value="High Dew">High Dew (Ball slips)</option>
+                        <option value="No Dew">No Dew (Good grip)</option>
+                    </select>
+                </div>
+
+                <!-- Rain -->
+                <div class="form-group">
+                    <label for="rain">🌧️ Rain Condition</label>
+                    <select name="rain" id="rain" required>
+                        <option value="">-- Select Rain --</option>
+                        <option value="Rain Affected">Rain Affected</option>
+                        <option value="No Rain">No Rain</option>
+                    </select>
+                </div>
+
+                <!-- Humidity -->
+                <div class="form-group">
+                    <label for="humidity">💨 Humidity</label>
+                    <select name="humidity" id="humidity" required>
+                        <option value="">-- Select Humidity --</option>
+                        <option value="High Humidity">High Humidity (Swing)</option>
+                        <option value="Normal Humidity">Normal Humidity</option>
+                    </select>
+                </div>
+
+                <!-- Turning Pitch -->
+                <div class="form-group">
+                    <label for="turn">🔄 Pitch Turn</label>
+                    <select name="turn" id="turn" required>
+                        <option value="">-- Select Turn --</option>
+                        <option value="Slow Turning Pitch">Slow Turning Pitch (Spinner friendly)</option>
+                        <option value="Fast Pitch">Fast Pitch (Pacer friendly)</option>
+                    </select>
+                </div>
+
+                <!-- Ground Size -->
+                <div class="form-group">
+                    <label for="ground">📏 Ground Size</label>
+                    <select name="ground" id="ground" required>
+                        <option value="">-- Select Ground --</option>
+                        <option value="Small Ground">Small Ground (Batter friendly)</option>
+                        <option value="Large Ground">Large Ground (Bowler friendly)</option>
+                    </select>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit">🎯 Calculate Toss Decision</button>
+                </div>
+            </form>
+
+            <div class="info-box">
+                <strong>💡 Game Theory Tip:</strong>
+                The toss decision is calculated based on pitch conditions and statistical win probabilities!
+            </div>
+        </div>
+    </div>
+</body>
+</html>
